@@ -32,39 +32,45 @@ function displayResults(addresses) {
     resultsDiv.appendChild(blockchainDiv);
 
     if (Array.isArray(addressList)) {
-      // Para Ethereum, Tron e outros tipos similares, que são arrays de objetos com saldo
+      // Para Ethereum, Tron, e outros tipos similares (arrays)
       addressList.forEach((entry, index) => {
-        const addressDiv = document.createElement("div");
-
-        const explorerURL = getExplorerURL(blockchain, entry.address);
-
         if (entry.balance > 0) {
-          addressDiv.innerHTML = `<p style="color: white;">Endereço ${index + 1}: ${entry.address} - Saldo: <a href="${explorerURL}" target="_blank" style="color: white; text-decoration: underline;">${entry.balance}</a> (Caminho: ${entry.path})</p>`;
-        } else {
-          addressDiv.innerHTML = `<p>Endereço ${index + 1}: ${entry.address} - Saldo: ${entry.balance}</p>`;
+          const addressDiv = document.createElement("div");
+          const explorerURL = getExplorerURL(blockchain, entry.address);
+          addressDiv.innerHTML = `
+            <p style="color: white;">
+              Endereço ${index + 1}: 
+              <a href="${explorerURL}" target="_blank" style="color: white; text-decoration: underline;">
+                ${entry.address}
+              </a> - Saldo: ${entry.balance}
+              <br><small>Caminho: ${entry.path}</small>
+            </p>
+          `;
+          blockchainDiv.appendChild(addressDiv);
         }
-
-        blockchainDiv.appendChild(addressDiv);
       });
     } else {
-      // Para Bitcoin, que é um objeto com diferentes tipos de endereços
+      // Para Bitcoin (objeto com tipos diferentes)
       for (const [type, addresses] of Object.entries(addressList)) {
         const typeDiv = document.createElement("div");
         typeDiv.innerHTML = `<h3>${type}</h3>`;
         blockchainDiv.appendChild(typeDiv);
 
         addresses.forEach((entry, index) => {
-          const addressDiv = document.createElement("div");
-
-          const explorerURL = getExplorerURL("Bitcoin", entry.address);
-
           if (entry.balance > 0) {
-            addressDiv.innerHTML = `<p style="color: white;">Endereço ${index + 1}: ${entry.address} - Saldo: <a href="${explorerURL}" target="_blank" style="color: white; text-decoration: underline;">${entry.balance}</a> (Caminho: ${entry.path})</p>`;
-          } else {
-            addressDiv.innerHTML = `<p>Endereço ${index + 1}: ${entry.address} - Saldo: ${entry.balance}</p>`;
+            const addressDiv = document.createElement("div");
+            const explorerURL = getExplorerURL("Bitcoin", entry.address);
+            addressDiv.innerHTML = `
+              <p style="color: white;">
+                Endereço ${index + 1}: 
+                <a href="${explorerURL}" target="_blank" style="color: white; text-decoration: underline;">
+                  ${entry.address}
+                </a> - Saldo: ${entry.balance}
+                <br><small>Caminho: ${entry.path}</small>
+              </p>
+            `;
+            typeDiv.appendChild(addressDiv);
           }
-
-          typeDiv.appendChild(addressDiv);
         });
       }
     }
